@@ -55,13 +55,26 @@
 
 		<nav>
 			<div class="nav nav-tabs" id="nav-tab" role="tablist">
+                {% if 'classify' in   request.path %}
 				<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Classifier</a>
-				<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Dump Upload</a>
-				<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Help</a>
+				{% else %}
+                <a class="nav-item nav-link" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Classifier</a>
+                {% endif %}
+                {% if 'dump' in  request.path %}
+                <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Dump Upload</a>
+				{% else %}
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Dump Upload</a>
+                {% endif %}
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Recommend</a>
 			</div>
 		</nav>
+
 		<div class="tab-content" id="nav-tabContent">
-			<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            {% if 'classify' in   request.path %}
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            {% else %}
+             <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            {% endif %}
 			<!-- -->
                 {% include 'partials/alerts.html' %}
 				<form action="{% url 'classify' %}" method="POST">
@@ -75,21 +88,83 @@
 				</form>
 			<!-- -->
 			</div>
-			<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            {% if 'dump' in  request.path %}
+			<div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            {% else %}
+              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            {% endif %}
 			<!-- -->
-				<form>
+				<form action="{% url 'dumpclassify' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
 					<div class="form-group">
 						<br>
-						<input type="file" class="form-control-file" id="dump">
+						<input type="file" name ="myfile" class="form-control-file" id="dump">
 					</div>
 
 					<button type="submit" class="btn btn-primary">Submit</button>
 				</form>
+                <!--result cards-->
+                {% if automatable %}
+                <br><br><br><hr>
+                    <div class='col-md-12 row col-md-offset-1'>
+                        <div class='col-md-1'></div>
+                        <div class="card col-md-4" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Automatable</h5>
+                                <!--<h6 class="card-subtitle mb-2 text-muted">Total automatable from </h6>-->
+                                <p class="card-text"><center><h2>{{ automatable }}</h2></center></p>
+                            </div>
+                        </div>
+                        <div class='col-md-1'></div>
+                        <div class="card col-md-4" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Non-Automatable</h5>
+                               <!-- <h6 class="card-subtitle mb-2 text-muted">Total non automatable from </h6> -->
+                                <p class="card-text"><center><h2>{{ nonautomatable }}</h2></center></p>
+                            </div>
+                        </div>
+                    </div>
+                   {% endif %}
 			<!-- -->
 			</div>
+
 			<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
 			<!-- -->
+           <center> <div class="dropdown">
+               <br>
+               <br>
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Please select the input
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+            <br><br><br><br><br><hr>
+                    <div class='col-md-12 row col-md-offset-1'>
+                        <div class="card col-md-12" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Automatable</h5>
+                                <!--<h6 class="card-subtitle mb-2 text-muted">Total automatable from </h6>-->
+                                <p class="card-text"><center><h2>test</h2></center></p>
+                            </div>
+                    </div>
+                </div>
+                <br>
+                <div class='col-md-12 row col-md-offset-1'>
+                        <div class="card col-md-12" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Automatable</h5>
+                                <!--<h6 class="card-subtitle mb-2 text-muted">Total automatable from </h6>-->
+                                <p class="card-text"><center><h2>test</h2></center></p>
+                            </div>
+                    </div>
+                </div>
 
+
+           </center>
 			<!-- -->
 			</div>
 		</div>
