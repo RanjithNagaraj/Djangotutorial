@@ -24,8 +24,8 @@ def listing(request,listing_id):
     context = {
         'listing':listing
     }
-    print("printing classified value")
-    print(pipe_clf.predict([str('patch issue')])[0])
+    #print("printing classified value")
+    #print(pipe_clf.predict([str('patch issue')])[0])
     return render(request, 'listings/listing.html',context)
 
 def search(request):
