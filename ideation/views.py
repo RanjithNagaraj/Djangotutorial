@@ -5,6 +5,7 @@ from django.contrib import messages
 from pathlib import Path
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
+from recommendation import *
 # Create your views here.
 
 def classify(request):
@@ -50,3 +51,20 @@ def dumpclassify(request):
     else:
         print("came inside")
         return  render(request, 'ideation/index.html')
+
+def recommending(request):
+    if request.method == 'POST':
+        iptext = request.POST['dropdown']
+        print(iptext)
+        print(recommend)
+        recommendations = recommend(iptext)
+        print(recommendations)
+        context ={
+            'recommendations': recommendations,
+            'text':iptext
+        }
+        return render(request, 'ideation/index.html',context)
+    else:
+        return render(request, 'ideation/index.html')
+
+

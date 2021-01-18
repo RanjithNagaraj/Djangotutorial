@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" contenxt="">
 
-  <title>Intelligent Classifier</title>
+  <title>Intelligent Automation</title>
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -65,7 +65,11 @@
 				{% else %}
                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Dump Upload</a>
                 {% endif %}
+                {% if 'recommned' in  request.path %}
+                <a class="nav-item nav-link active" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Recommend</a>
+                {% else %}
                 <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Recommend</a>
+                {% endif %}
 			</div>
 		</nav>
 
@@ -127,41 +131,46 @@
                    {% endif %}
 			<!-- -->
 			</div>
-
-			<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+            {% if 'recommend' in  request.path %}
+			<div class="tab-pane fade show active" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+             {% else %}
+             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+              {% endif %}
 			<!-- -->
-           <center> <div class="dropdown">
-               <br>
-               <br>
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Please select the input
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div>
+           <center>
+
+               <form action="{% url 'recommend' %}" method="post">
+                   {% csrf_token %}
+              <select name="dropdown">
+                 {% if text %}
+                  <option selected="selected" >{{ text }}</option>
+                  {% else %}
+                <option selected="selected" disabled>Please select the input:</option>
+                  {% endif %}
+                <option value="Power Supply status">Power Supply status</option>
+                <option value="Link Utilization">Link Utilization</option>
+                <option value="fetch list of accesspoint client details with IP address & hostnmaes">fetch list of accesspoint client details with IP address & hostnmaes</option>
+                <option value="Report for snapshot, CDP and etc">Report for snapshot, CDP and etc</option>
+              </select>
+              <input type="submit" value="Select">
+            </form>
+
+
             <br><br><br><br><br><hr>
+               {% if recommendations %}
+                    {% for listing in recommendations %}
                     <div class='col-md-12 row col-md-offset-1'>
-                        <div class="card col-md-12" style="width: 18rem;">
+                        <div class="card col-md-12" style="width: 18rem;color:green;border:2px solid blue;">
                             <div class="card-body">
-                                <h5 class="card-title">Automatable</h5>
+                                <!--<h5 class="card-title">Automatable</h5>-->
                                 <!--<h6 class="card-subtitle mb-2 text-muted">Total automatable from </h6>-->
-                                <p class="card-text"><center><h2>test</h2></center></p>
+                                <p class="card-text">{{ listing }}</p>
                             </div>
                     </div>
                 </div>
                 <br>
-                <div class='col-md-12 row col-md-offset-1'>
-                        <div class="card col-md-12" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Automatable</h5>
-                                <!--<h6 class="card-subtitle mb-2 text-muted">Total automatable from </h6>-->
-                                <p class="card-text"><center><h2>test</h2></center></p>
-                            </div>
-                    </div>
-                </div>
+                {% endfor %}
+               {% endif %}
 
 
            </center>
